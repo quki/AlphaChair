@@ -9,8 +9,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.quki.alphachair.alphachairandroid.MainActivity">
 
-    <TextView
+    <Button
+        android:id="@+id/onButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="On" />
+    <Button
+        android:id="@+id/offButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/onButton"
+        android:text="Off" />
 </RelativeLayout>
