@@ -18,18 +18,25 @@ public class MainActivity extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_ENABLE_BT = 1001;
-    private Button onButton,offButton,receiveButton;
-    private TextView sensorView;
+    private Button onButton,offButton,receiveButton,plusTemp,minusTemp;
+    private TextView sensorView,temperature,temperatureReceived;
     private BluetoothHelper mBluetoothHelper;
-
+    private static int TEMPERATURE_OFFSET = 10;
+    private int mTemperature = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         onButton = (Button) findViewById(R.id.onButton);
         offButton = (Button) findViewById(R.id.offButton);
         sensorView = (TextView) findViewById(R.id.sensorView);
         receiveButton = (Button) findViewById(R.id.receiveButton);
+        plusTemp = (Button) findViewById(R.id.plusTemp);
+        minusTemp = (Button) findViewById(R.id.minusTemp);
+        temperature = (TextView) findViewById(R.id.temperature);
+        temperatureReceived = (TextView) findViewById(R.id.temperatureReceived);
+
         onButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +65,24 @@ public class MainActivity extends AppCompatActivity {
                     mBluetoothHelper.offFSR();
                 }
 
+            }
+        });
+
+        plusTemp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_UP);
+                mTemperature += TEMPERATURE_OFFSET;
+                temperature.setText(mTemperature);
+            }
+        });
+
+        minusTemp.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_DOWN);
+                mTemperature -= TEMPERATURE_OFFSET;
+                temperature.setText(mTemperature);
             }
         });
     }
