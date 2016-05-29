@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         plusTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_UP);
+                mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_ON);
                 mTemperature += TEMPERATURE_OFFSET;
                 temperature.setText(mTemperature);
             }
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         minusTemp.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_DOWN);
+                mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_OFF);
                 mTemperature -= TEMPERATURE_OFFSET;
                 temperature.setText(mTemperature);
             }

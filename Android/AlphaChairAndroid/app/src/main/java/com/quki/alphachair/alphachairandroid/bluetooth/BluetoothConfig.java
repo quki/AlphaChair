@@ -5,10 +5,10 @@ package com.quki.alphachair.alphachairandroid.bluetooth;
  */
 public class BluetoothConfig {
 
-    public static final int REQUEST_PROPELLER_ON = 1;
-    public static final int REQUEST_PROPELLER_OFF = 2;
-    public static final int REQUEST_FORCE_SENSOR_ON = 3;
-    public static final int REQUEST_FORCE_SENSOR_OFF = 4;
-    public static final int REQUEST_TEMPERATURE_UP = 5;
-    public static final int REQUEST_TEMPERATURE_DOWN = 6;
+    public static final String REQUEST_PROPELLER_ON = "a";
+    public static final String REQUEST_PROPELLER_OFF = "b";
+    public static final String REQUEST_FORCE_SENSOR_ON = "c";
+    public static final String REQUEST_FORCE_SENSOR_OFF = "d";
+    public static final String REQUEST_TEMPERATURE_ON = "e";
+    public static final String REQUEST_TEMPERATURE_OFF = "f";
 }

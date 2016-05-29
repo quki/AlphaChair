@@ -41,6 +41,7 @@ public class BluetoothHelper {
         for (BluetoothDevice bondedDevice : mBondedDevices) {
             String deviceName = bondedDevice.getName();
             if (deviceName.equals("HC-06")) {
+            //if (deviceName.equals("sexpower")) {
                 mArduino = bondedDevice;
                 connectWithArduino(mArduino);
                 break;
@@ -80,15 +81,17 @@ public class BluetoothHelper {
         }
     }
 
-    public boolean writeToArduino(int msg) {
-        //msg += mStrDelimiter;  // 문자열 종료표시 (\n)
+    public boolean writeToArduino(String msg) {
+        msg += mStrDelimiter;  // 문자열 종료표시 (\n)
         try {
             // getBytes() : String을 byte로 변환
             // OutputStream.write : 데이터를 쓸때는 write(byte[]) 메소드를 사용함. byte[] 안에 있는 데이터를 한번에 기록해 준다.
             //mOutputStream.write(msg.getBytes());
-            mOutputStream.write(msg);
+            mOutputStream.write(msg.getBytes());
+            mBluetoothAction.setFSRDataToUI(msg);
             return true;
         } catch (Exception e) {
+            mBluetoothAction.connectionFail();
             return false;
         }
     }
