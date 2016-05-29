@@ -1,10 +1,13 @@
 #include <SoftwareSerial.h>
+#include <Thread.h>
 #define PPR_ON "a"
 #define PPR_OFF "b"
 #define FSR_ON "c"
 #define FSR_OFF "d"
 #define TMP_ON "e"
 #define TMP_OFF "f"
+
+Thread fsrThread = Thread(); // For measuring Pressure data in other thread
 
 //  Mosfet
 int MOSFET_C1 = 6;
@@ -31,6 +34,9 @@ void setup() {
   pinMode(INB,OUTPUT); 
   pinMode(MOSFET_C1, OUTPUT);
   pinMode(MOSFET_C2, OUTPUT);
+  fsrThread.onRun(readPressure);
+  fsrThread.enabled = false;
+  fsrThread.setInterval(1000);
 }
 
 void loop() {
@@ -76,14 +82,19 @@ void loop() {
   }
   
   if(isFSROn){
-    readPressure();
+    fsrThread.enabled = true;
+    if(fsrThread.shouldRun())
+    fsrThread.run();
+  }else{
+    fsrThread.enabled = false;
   }
 }
+
+// Runnable for fsrThread
 void readPressure(){
   int fsrData = analogRead(PRESSURE);
   Serial.println("Pressure : "+ String(fsrData));
   BTSerial.println(fsrData);
-  delay(1000);
 }
 
 void readTmp(){
