@@ -20,7 +20,6 @@ int INA = 9;
 int PRESSURE = A0; 
 int TEMPERATURE = A1;
 
-bool isFSROn = false;
 bool isTMPOn = false;
 
 int MAX_TMP;
@@ -64,10 +63,10 @@ void loop() {
     digitalWrite(INB,LOW);
   }else if(response.equals(FSR_ON)){
     Serial.println(response);
-    isFSROn= true;
+    fsrThread.enabled = true;
   }else if(response.equals(FSR_OFF)){
     Serial.println(response);
-    isFSROn= false;
+    fsrThread.enabled = false;
   }else if(response.equals(TMP_ON)){
     Serial.println(response);
     isTMPOn = true;
@@ -81,13 +80,8 @@ void loop() {
     readTmp();
   }
   
-  if(isFSROn){
-    fsrThread.enabled = true;
-    if(fsrThread.shouldRun())
+  if(fsrThread.shouldRun())
     fsrThread.run();
-  }else{
-    fsrThread.enabled = false;
-  }
 }
 
 // Runnable for fsrThread
