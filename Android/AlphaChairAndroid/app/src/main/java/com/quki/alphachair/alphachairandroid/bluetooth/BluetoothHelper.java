@@ -3,14 +3,20 @@ package com.quki.alphachair.alphachairandroid.bluetooth;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
+
+import com.quki.alphachair.alphachairandroid.mydata.MyData;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
+
+import io.realm.Realm;
 
 /**
  * Created by quki on 2016-05-07.
@@ -28,11 +34,15 @@ public class BluetoothHelper {
     private BluetoothSocket mSocket;
     private BluetoothDevice mArduino;
     private BluetoothAction mBluetoothAction;
+    private Context mContext;
+    private Realm realm;
 
-    public BluetoothHelper(BluetoothAdapter mBluetoothAdapter, BluetoothAction mBluetoothAction){
+    public BluetoothHelper(BluetoothAdapter mBluetoothAdapter, BluetoothAction mBluetoothAction,Context mContext) {
         this.mBluetoothAdapter = mBluetoothAdapter;
         this.mBluetoothAction = mBluetoothAction;
+        this.mContext = mContext;
     }
+
     /**
      * Find Arduino(HC-06)
      */
@@ -69,12 +79,12 @@ public class BluetoothHelper {
         }
     }
 
-    public void disconnectWithArduino(){
-        if(mSocket!=null){
-            try{
+    public void disconnectWithArduino() {
+        if (mSocket != null) {
+            try {
                 mSocket.close();
                 mSocket = null;
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -97,7 +107,7 @@ public class BluetoothHelper {
 
     public void onReadyToReceiveFSR() {
         if (writeToArduino(BluetoothConfig.REQUEST_FORCE_SENSOR_ON)) {
-
+            realm = Realm.getInstance(mContext);
             beginListenForData();
         }
     }
@@ -136,6 +146,14 @@ public class BluetoothHelper {
                                         public void run() {
                                             Log.d("===FETCHED DATA===", data);
                                             mBluetoothAction.setFSRDataToUI(data);
+                                            float dataFloat = Float.parseFloat(data);
+                                            MyData mData = new MyData();
+                                            mData.setName("posture");
+                                            mData.setNow(new Date());
+                                            mData.setFSRData(dataFloat,dataFloat,dataFloat,dataFloat);
+                                            realm.beginTransaction();
+                                            realm.copyToRealm(mData);
+                                            realm.commitTransaction();
                                         }
                                     });
                                 } else {

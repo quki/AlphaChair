@@ -16,7 +16,6 @@ import com.quki.alphachair.alphachairandroid.service.MainService;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_ENABLE_BT = 1001;
     private Button onButton,offButton,receiveButton,plusTemp,minusTemp;
@@ -76,18 +75,25 @@ public class MainActivity extends AppCompatActivity {
         plusTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_ON);
+
                 mTemperature += TEMPERATURE_OFFSET;
-                temperature.setText(mTemperature);
+                mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_ON+mTemperature);
+                temperature.setText(String.valueOf(mTemperature));
             }
         });
 
         minusTemp.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_OFF);
+
                 mTemperature -= TEMPERATURE_OFFSET;
-                temperature.setText(mTemperature);
+                if(mTemperature>0){
+                    mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_ON+mTemperature);
+                }else{
+                    mTemperature = 0;
+                    mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_OFF);
+                }
+                temperature.setText(String.valueOf(mTemperature));
             }
         });
     }
@@ -100,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initBluetooth() {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mBluetoothHelper = new BluetoothHelper(mBluetoothAdapter,getBluetoothAction());
+        mBluetoothHelper = new BluetoothHelper(mBluetoothAdapter,getBluetoothAction(),getApplicationContext());
         if (mBluetoothAdapter != null) {
             if (!mBluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);

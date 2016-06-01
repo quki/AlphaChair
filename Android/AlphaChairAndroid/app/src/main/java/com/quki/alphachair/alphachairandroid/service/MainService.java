@@ -28,6 +28,7 @@ public class MainService extends Service implements Runnable{
         mHandler = new Handler();
         mHandler.postDelayed(this, 1); // call run(), count mode on
         setServiceNotification();
+
     }
 
     @Override
