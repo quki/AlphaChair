@@ -63,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/receiveButton"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="60dp"
         android:text="온도"
         android:textSize="20dp" />
     <Button
@@ -90,13 +90,4 @@
         android:layout_below="@+id/tempViewTitle"
         android:layout_marginLeft="250dp"
         android:text="+" />
-    <TextView
-        android:id="@+id/temperatureReceived"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/temperature"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="170dp"
-        android:text="0"
-        android:textSize="30dp" />
 </RelativeLayout>

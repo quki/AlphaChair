@@ -41,7 +41,6 @@ public class BluetoothHelper {
         for (BluetoothDevice bondedDevice : mBondedDevices) {
             String deviceName = bondedDevice.getName();
             if (deviceName.equals("HC-06")) {
-            //if (deviceName.equals("sexpower")) {
                 mArduino = bondedDevice;
                 connectWithArduino(mArduino);
                 break;

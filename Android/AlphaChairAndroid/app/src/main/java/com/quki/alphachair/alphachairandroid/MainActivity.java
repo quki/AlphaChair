@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.quki.alphachair.alphachairandroid.bluetooth.BluetoothAction;
 import com.quki.alphachair.alphachairandroid.bluetooth.BluetoothConfig;
 import com.quki.alphachair.alphachairandroid.bluetooth.BluetoothHelper;
+import com.quki.alphachair.alphachairandroid.service.MainService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_ENABLE_BT = 1001;
     private Button onButton,offButton,receiveButton,plusTemp,minusTemp;
-    private TextView sensorView,temperature,temperatureReceived;
+    private TextView sensorView,temperature;
     private BluetoothHelper mBluetoothHelper;
     private static int TEMPERATURE_OFFSET = 10;
     private int mTemperature = 0;
@@ -35,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         plusTemp = (Button) findViewById(R.id.plusTemp);
         minusTemp = (Button) findViewById(R.id.minusTemp);
         temperature = (TextView) findViewById(R.id.temperature);
-        temperatureReceived = (TextView) findViewById(R.id.temperatureReceived);
 
         onButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,11 +58,16 @@ public class MainActivity extends AppCompatActivity {
                 if (buttonStatus.equals("On")) {
                     Toast.makeText(getApplicationContext(), "수신상태 On", Toast.LENGTH_SHORT).show();
                     receiveButton.setText("Off");
-                    mBluetoothHelper.onReadyToReceiveFSR();
+                    //mBluetoothHelper.onReadyToReceiveFSR();
+                    // 서비스 생성
+                    startService();
+
                 } else {
                     Toast.makeText(getApplicationContext(), "수신상태 Off", Toast.LENGTH_SHORT).show();
                     receiveButton.setText("On");
-                    mBluetoothHelper.offFSR();
+                    //mBluetoothHelper.offFSR();
+
+                    stopService();
                 }
 
             }
@@ -116,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void connectionFail() {
                 Toast.makeText(getApplicationContext(),"연결 실패",Toast.LENGTH_SHORT).show();
-                finish();
+                //finish();
             }
 
             @Override
@@ -151,5 +156,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    protected void startService(){
+        Intent intentService = new Intent(this, MainService.class);
+        startService(intentService);
+    }
+    protected void stopService(){
+        Intent intentService = new Intent(this, MainService.class);
+        stopService(intentService);
     }
 }
