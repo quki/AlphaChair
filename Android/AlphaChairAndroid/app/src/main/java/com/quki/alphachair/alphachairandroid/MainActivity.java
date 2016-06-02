@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_ENABLE_BT = 1001;
-    private Button onButton,offButton,receiveButton,plusTemp,minusTemp;
+    private Button onButton,offButton,receiveFSRButton,plusTemp,minusTemp,nextActivity;
     private TextView sensorView,temperature;
     private BluetoothHelper mBluetoothHelper;
     private static int TEMPERATURE_OFFSET = 10;
@@ -31,10 +31,11 @@ public class MainActivity extends AppCompatActivity {
         onButton = (Button) findViewById(R.id.onButton);
         offButton = (Button) findViewById(R.id.offButton);
         sensorView = (TextView) findViewById(R.id.sensorView);
-        receiveButton = (Button) findViewById(R.id.receiveButton);
+        receiveFSRButton = (Button) findViewById(R.id.receiveFSRButton);
         plusTemp = (Button) findViewById(R.id.plusTemp);
         minusTemp = (Button) findViewById(R.id.minusTemp);
         temperature = (TextView) findViewById(R.id.temperature);
+        nextActivity = (Button) findViewById(R.id.nextActivity);
 
         onButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,22 +51,20 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"프로펠러 OFF",Toast.LENGTH_SHORT).show();
             }
         });
-        receiveButton.setOnClickListener(new View.OnClickListener() {
+        receiveFSRButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String buttonStatus = receiveButton.getText().toString();
+                String buttonStatus = receiveFSRButton.getText().toString();
                 if (buttonStatus.equals("On")) {
                     Toast.makeText(getApplicationContext(), "수신상태 On", Toast.LENGTH_SHORT).show();
-                    receiveButton.setText("Off");
-                    //mBluetoothHelper.onReadyToReceiveFSR();
+                    receiveFSRButton.setText("Off");
                     // 서비스 생성
                     startService();
 
                 } else {
                     Toast.makeText(getApplicationContext(), "수신상태 Off", Toast.LENGTH_SHORT).show();
-                    receiveButton.setText("On");
-                    //mBluetoothHelper.offFSR();
-
+                    receiveFSRButton.setText("On");
+                    // 서비스 중지
                     stopService();
                 }
 
@@ -94,6 +93,13 @@ public class MainActivity extends AppCompatActivity {
                     mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_OFF);
                 }
                 temperature.setText(String.valueOf(mTemperature));
+            }
+        });
+        nextActivity.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent nextIntent = new Intent(MainActivity.this,Main2Activity.class);
+                startActivity(nextIntent);
             }
         });
     }

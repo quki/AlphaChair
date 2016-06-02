@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
 
 import com.quki.alphachair.alphachairandroid.MainActivity;
 import com.quki.alphachair.alphachairandroid.R;
@@ -19,14 +18,10 @@ import com.quki.alphachair.alphachairandroid.R;
 public class MainService extends Service implements Runnable{
 
     private Handler mHandler;
-    private int count = 1;
-
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(getApplicationContext(),"onCreate",Toast.LENGTH_SHORT).show();
         mHandler = new Handler();
-        mHandler.postDelayed(this, 1); // call run(), count mode on
         setServiceNotification();
 
     }
@@ -34,7 +29,7 @@ public class MainService extends Service implements Runnable{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-
+        mHandler.postDelayed(this, 1);
         return START_STICKY;
     }
 
@@ -47,7 +42,6 @@ public class MainService extends Service implements Runnable{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(getApplicationContext(),"onDestroy",Toast.LENGTH_SHORT).show();
         mHandler.removeCallbacks(this); // stop run()
         stopForeground(true);
     }

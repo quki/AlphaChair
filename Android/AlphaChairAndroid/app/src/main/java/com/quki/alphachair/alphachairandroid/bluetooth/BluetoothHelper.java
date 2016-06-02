@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Parcel;
 import android.util.Log;
 
 import com.quki.alphachair.alphachairandroid.mydata.MyData;
@@ -21,7 +22,7 @@ import io.realm.Realm;
 /**
  * Created by quki on 2016-05-07.
  */
-public class BluetoothHelper {
+public class BluetoothHelper{
 
     private Thread mWorkerThread = null;
     private byte[] readBuffer;
@@ -42,6 +43,16 @@ public class BluetoothHelper {
         this.mBluetoothAction = mBluetoothAction;
         this.mContext = mContext;
     }
+
+    protected BluetoothHelper(Parcel in) {
+        readBuffer = in.createByteArray();
+        readBufferPosition = in.readInt();
+        stopWorker = in.readByte() != 0;
+        mStrDelimiter = in.readString();
+        mArduino = in.readParcelable(BluetoothDevice.class.getClassLoader());
+        realm = in.readParcelable(Realm.class.getClassLoader());
+    }
+
 
     /**
      * Find Arduino(HC-06)
@@ -150,7 +161,10 @@ public class BluetoothHelper {
                                             MyData mData = new MyData();
                                             mData.setName("posture");
                                             mData.setNow(new Date());
-                                            mData.setFSRData(dataFloat,dataFloat,dataFloat,dataFloat);
+                                            mData.setFrontRight(dataFloat);
+                                            mData.setFrontLeft(dataFloat);
+                                            mData.setBackRight(dataFloat);
+                                            mData.setBackLeft(dataFloat);
                                             realm.beginTransaction();
                                             realm.copyToRealm(mData);
                                             realm.commitTransaction();
@@ -169,5 +183,15 @@ public class BluetoothHelper {
         });
         mWorkerThread.start();
     }
+    public void test(){
+        Log.e("==TEST==","delivered BTHELPER");
+        MyData mData = new MyData();
+        mData.setName("posture");
+        mData.setNow(new Date());
+        realm.beginTransaction();
+        realm.copyToRealm(mData);
+        realm.commitTransaction();
+    }
+
 
 }

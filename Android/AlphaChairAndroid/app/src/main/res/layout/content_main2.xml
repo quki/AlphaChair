@@ -12,4 +12,10 @@
     tools:context="com.quki.alphachair.alphachairandroid.Main2Activity"
     tools:showIn="@layout/activity_main2">
 
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="none" />
+
 </RelativeLayout>

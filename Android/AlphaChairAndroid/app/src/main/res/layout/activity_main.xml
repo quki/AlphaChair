@@ -41,7 +41,7 @@
         android:textSize="20dp" />
 
     <Button
-        android:id="@+id/receiveButton"
+        android:id="@+id/receiveFSRButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/sensorView"
@@ -62,7 +62,7 @@
         android:id="@+id/tempViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/receiveButton"
+        android:layout_below="@id/receiveFSRButton"
         android:layout_marginTop="60dp"
         android:text="온도"
         android:textSize="20dp" />
@@ -90,4 +90,11 @@
         android:layout_below="@+id/tempViewTitle"
         android:layout_marginLeft="250dp"
         android:text="+" />
+    <Button
+        android:id="@+id/nextActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/plusTemp"
+        android:layout_marginLeft="250dp"
+        android:text="자세결과보기" />
 </RelativeLayout>

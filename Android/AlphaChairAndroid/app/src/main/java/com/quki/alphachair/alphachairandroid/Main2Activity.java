@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import com.quki.alphachair.alphachairandroid.mydata.MyData;
 
@@ -16,13 +17,14 @@ import io.realm.RealmResults;
 public class Main2Activity extends AppCompatActivity {
     RealmResults<MyData> realmResultsAsync;
     RealmChangeListener mRealmListener;
+    TextView status;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        status = (TextView)findViewById(R.id.status);
         Realm realm = Realm.getInstance(getApplicationContext());
         realmResultsAsync = realm.where(MyData.class).findAllAsync(); // find data asynchronous
 
@@ -42,7 +44,11 @@ public class Main2Activity extends AppCompatActivity {
         mRealmListener = new RealmChangeListener() {
             @Override
             public void onChange() {
-
+                status.setText("Data from Realm\n");
+                for(int i=0; i<realmResultsAsync.size();i++){
+                    status.append(realmResultsAsync.get(i).getFrontRight()+" _ "+ realmResultsAsync.get(i).getNow());
+                    status.append("\n");
+                }
             }
         };
         realmResultsAsync.addChangeListener(mRealmListener);
