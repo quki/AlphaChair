@@ -15,15 +15,16 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
-public class Main2Activity extends AppCompatActivity {
+public class PostureActivity extends AppCompatActivity {
     private RealmResults<MyData> realmResultsAsync;
     private RealmChangeListener mRealmListener;
     private TextView status;
     private Realm realm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_posture);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         status = (TextView)findViewById(R.id.status);

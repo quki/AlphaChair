@@ -9,8 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.quki.alphachair.alphachairandroid.Main2Activity"
-    tools:showIn="@layout/activity_main2">
+    tools:context=".PostureActivity"
+    tools:showIn="@layout/activity_posture">
 
     <TextView
         android:id="@+id/status"
