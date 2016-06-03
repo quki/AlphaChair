@@ -12,12 +12,14 @@ import com.quki.alphachair.alphachairandroid.mydata.MyData;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 public class Main2Activity extends AppCompatActivity {
-    RealmResults<MyData> realmResultsAsync;
-    RealmChangeListener mRealmListener;
-    TextView status;
+    private RealmResults<MyData> realmResultsAsync;
+    private RealmChangeListener mRealmListener;
+    private TextView status;
+    private Realm realm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +27,12 @@ public class Main2Activity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         status = (TextView)findViewById(R.id.status);
-        Realm realm = Realm.getInstance(getApplicationContext());
+        RealmConfiguration config = new RealmConfiguration
+                .Builder(getApplicationContext())
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        realm = Realm.getInstance(config);
         realmResultsAsync = realm.where(MyData.class).findAllAsync(); // find data asynchronous
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -57,6 +64,12 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         realmResultsAsync.removeChangeListener(mRealmListener);
+        realm.close();
     }
 }

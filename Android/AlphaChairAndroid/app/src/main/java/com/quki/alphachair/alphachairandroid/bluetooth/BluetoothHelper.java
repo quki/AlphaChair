@@ -153,7 +153,8 @@ public class BluetoothHelper{
                                             mData.setPosture(data);
                                             realm.beginTransaction();
                                             realm.copyToRealm(mData);
-                                            realm.commitTransaction();*/
+                                            realm.commitTransaction();
+                                            realm.close();*/
                                         }
                                     });
                                 } else {
