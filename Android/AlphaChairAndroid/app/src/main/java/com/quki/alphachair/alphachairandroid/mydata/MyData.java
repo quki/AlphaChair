@@ -13,47 +13,30 @@ public class MyData extends RealmObject {
     @Required // Name은 null이 될 수 없음
     private String name;
     private Date now;
-    private float frontRight,frontLeft,backRight,backLeft;
+    private String posture;
+
     public void setName(String name) {
         this.name = name;
     }
-    public void setFrontRight(float frontRight){
-        this.frontRight = frontRight;
+
+    public void setPosture(String posture) {
+        this.posture = posture;
     }
-    public void setFrontLeft(float frontLeft){
-        this.frontLeft = frontLeft;
-    }
-    public void setBackRight(float backRight){
-        this.backRight = backRight;
-    }
-    public void setBackLeft(float backLeft){
-        this.backLeft = backLeft;
-    }
+
     public void setNow(Date now) {
         this.now = now;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public float getFrontRight() {
-        return frontRight;
+    public String getPosture() {
+        return posture;
     }
 
-    public float getFrontLeft() {
-        return frontLeft;
-    }
 
-    public float getBackRight() {
-        return backRight;
-    }
-
-    public float getBackLeft() {
-        return backLeft;
-    }
-
-    public Date getNow(){
+    public Date getNow() {
         return now;
     }
 

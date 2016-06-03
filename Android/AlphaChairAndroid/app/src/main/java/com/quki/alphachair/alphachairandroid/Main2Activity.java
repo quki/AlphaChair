@@ -46,7 +46,7 @@ public class Main2Activity extends AppCompatActivity {
             public void onChange() {
                 status.setText("Data from Realm\n");
                 for(int i=0; i<realmResultsAsync.size();i++){
-                    status.append(realmResultsAsync.get(i).getFrontRight()+" _ "+ realmResultsAsync.get(i).getNow());
+                    status.append(realmResultsAsync.get(i).getPosture()+" _ "+ realmResultsAsync.get(i).getNow());
                     status.append("\n");
                 }
             }

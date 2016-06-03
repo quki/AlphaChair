@@ -1,6 +1,8 @@
 package com.quki.alphachair.alphachairandroid;
 
+import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_ENABLE_BT = 1001;
-    private Button onButton,offButton,receiveFSRButton,plusTemp,minusTemp,nextActivity;
+    private Button onButton,offButton,receiveFSRButton,plusTemp,minusTemp,nextActivity,alarm;
     private TextView sensorView,temperature;
     private BluetoothHelper mBluetoothHelper;
     private static int TEMPERATURE_OFFSET = 10;
@@ -36,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
         minusTemp = (Button) findViewById(R.id.minusTemp);
         temperature = (TextView) findViewById(R.id.temperature);
         nextActivity = (Button) findViewById(R.id.nextActivity);
+        alarm = (Button) findViewById(R.id.alarm);
+
+        if(isMyServiceRunning(MainService.class))
+            receiveFSRButton.setText("Off");
 
         onButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,12 +64,14 @@ public class MainActivity extends AppCompatActivity {
                 if (buttonStatus.equals("On")) {
                     Toast.makeText(getApplicationContext(), "수신상태 On", Toast.LENGTH_SHORT).show();
                     receiveFSRButton.setText("Off");
+                    //mBluetoothHelper.onReadyToReceiveFSR();
                     // 서비스 생성
                     startService();
 
                 } else {
                     Toast.makeText(getApplicationContext(), "수신상태 Off", Toast.LENGTH_SHORT).show();
                     receiveFSRButton.setText("On");
+                    //mBluetoothHelper.offFSR();
                     // 서비스 중지
                     stopService();
                 }
@@ -100,6 +108,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent nextIntent = new Intent(MainActivity.this,Main2Activity.class);
                 startActivity(nextIntent);
+            }
+        });
+        alarm.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                sendPostureMsg("왼쪽으로 상당히 기울어짐");
             }
         });
     }
@@ -170,12 +184,28 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    protected void startService(){
+    private void startService(){
         Intent intentService = new Intent(this, MainService.class);
         startService(intentService);
     }
-    protected void stopService(){
+    private void sendPostureMsg(String msg){
+        Intent intentService = new Intent(this, MainService.class);
+        intentService.putExtra("msg",msg);
+        startService(intentService);
+    }
+
+    private void stopService(){
         Intent intentService = new Intent(this, MainService.class);
         stopService(intentService);
     }
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

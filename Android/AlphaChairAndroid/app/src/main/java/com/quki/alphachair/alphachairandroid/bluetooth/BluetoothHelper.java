@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.Handler;
-import android.os.Parcel;
 import android.util.Log;
 
 import com.quki.alphachair.alphachairandroid.mydata.MyData;
@@ -43,16 +42,6 @@ public class BluetoothHelper{
         this.mBluetoothAction = mBluetoothAction;
         this.mContext = mContext;
     }
-
-    protected BluetoothHelper(Parcel in) {
-        readBuffer = in.createByteArray();
-        readBufferPosition = in.readInt();
-        stopWorker = in.readByte() != 0;
-        mStrDelimiter = in.readString();
-        mArduino = in.readParcelable(BluetoothDevice.class.getClassLoader());
-        realm = in.readParcelable(Realm.class.getClassLoader());
-    }
-
 
     /**
      * Find Arduino(HC-06)
@@ -118,7 +107,7 @@ public class BluetoothHelper{
 
     public void onReadyToReceiveFSR() {
         if (writeToArduino(BluetoothConfig.REQUEST_FORCE_SENSOR_ON)) {
-            realm = Realm.getInstance(mContext);
+            //realm = Realm.getInstance(mContext);
             beginListenForData();
         }
     }
@@ -157,17 +146,14 @@ public class BluetoothHelper{
                                         public void run() {
                                             Log.d("===FETCHED DATA===", data);
                                             mBluetoothAction.setFSRDataToUI(data);
-                                            float dataFloat = Float.parseFloat(data);
+                                            /*
                                             MyData mData = new MyData();
                                             mData.setName("posture");
                                             mData.setNow(new Date());
-                                            mData.setFrontRight(dataFloat);
-                                            mData.setFrontLeft(dataFloat);
-                                            mData.setBackRight(dataFloat);
-                                            mData.setBackLeft(dataFloat);
+                                            mData.setPosture(data);
                                             realm.beginTransaction();
                                             realm.copyToRealm(mData);
-                                            realm.commitTransaction();
+                                            realm.commitTransaction();*/
                                         }
                                     });
                                 } else {
