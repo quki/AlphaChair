@@ -9,16 +9,17 @@
 
 Thread fsrThread = Thread(); // For measuring Pressure data in other thread
 
-//  Mosfet
-int MOSFET_C1 = 6;
+//  Mosfet channel
+int MOSFET_C1 = 10;
 int MOSFET_C2 = 7;
-
 //  UNO board
 int INB = 8;
 int INA = 9;
 //  Analog read  
-int PRESSURE = A0; 
-int TEMPERATURE = A1;
+int PRESSURE_0 = A0; 
+int PRESSURE_1 = A1; 
+int PRESSURE_2 = A2; 
+int PRESSURE_3 = A3; 
 
 bool isTMPOn = false;
 
@@ -33,6 +34,7 @@ void setup() {
   pinMode(INB,OUTPUT); 
   pinMode(MOSFET_C1, OUTPUT);
   pinMode(MOSFET_C2, OUTPUT);
+  digitalWrite(MOSFET_C1,LOW);
   fsrThread.onRun(readPressure);
   fsrThread.enabled = false;
   fsrThread.setInterval(1000);
@@ -44,7 +46,9 @@ void loop() {
   String response = "";
   while(BTSerial.available()){
     char tempChar = BTSerial.read();
-    if(tempChar != '\n')
+    if(tempChar == '\n'){
+      break;
+    }
     response.concat(tempChar);
   }
   if(response.length()>1){
@@ -52,7 +56,6 @@ void loop() {
     response = response.substring(0,1);
     MAX_TMP = resInt.toInt();
   }
-  
   if(response.equals(PPR_ON)){
     Serial.println(response);
     digitalWrite(INA,HIGH);
@@ -73,10 +76,11 @@ void loop() {
   }else if(response.equals(TMP_OFF)){
     Serial.println(response);
     MAX_TMP = 0;
+    digitalWrite(MOSFET_C1,LOW);
     isTMPOn = false;
   }
   
-  if(isTMPOn){
+  if(isTMPOn && MAX_TMP >0){
     readTmp();
   }
   
@@ -86,20 +90,22 @@ void loop() {
 
 // Runnable for fsrThread
 void readPressure(){
-  int fsrData = analogRead(PRESSURE);
-  Serial.println("Pressure : "+ String(fsrData));
-  BTSerial.println(fsrData);
+  int frontRight = analogRead(PRESSURE_0)*5;
+  int frontLeft = analogRead(PRESSURE_1)*5;
+  int backRight = analogRead(PRESSURE_2)*5;
+  int backLeft = analogRead(PRESSURE_3)*5;
+  Serial.println("0 : "+ String(frontRight));
+  Serial.println("1 : "+ String(frontLeft));
+  Serial.println("2 : "+ String(backRight));
+  Serial.println("3 : "+ String(backLeft));
+
+  if(frontRight>2000){
+    BTSerial.println("right leg side");
+  }
 }
 
 void readTmp(){
-  float analogTmp = (float)analogRead(TEMPERATURE)*5/1024;
-  float currTmp = 100*(analogTmp-0.5);
-  if(currTmp < MAX_TMP){
     digitalWrite(MOSFET_C1,HIGH);
-    digitalWrite(MOSFET_C2,HIGH);
-  }else{
-    digitalWrite(MOSFET_C1,LOW);
-    digitalWrite(MOSFET_C2,LOW);
-  }
+    Serial.println(String(MAX_TMP));  
 }
 
