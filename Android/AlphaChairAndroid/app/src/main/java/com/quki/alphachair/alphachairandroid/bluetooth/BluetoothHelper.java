@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.quki.alphachair.alphachairandroid.mydata.MyData;
+import com.quki.alphachair.alphachairandroid.notification.PostureNotification;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +18,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by quki on 2016-05-07.
@@ -36,11 +38,19 @@ public class BluetoothHelper{
     private BluetoothAction mBluetoothAction;
     private Context mContext;
     private Realm realm;
+    private PostureNotification mPostureNoti;
 
     public BluetoothHelper(BluetoothAdapter mBluetoothAdapter, BluetoothAction mBluetoothAction,Context mContext) {
         this.mBluetoothAdapter = mBluetoothAdapter;
         this.mBluetoothAction = mBluetoothAction;
         this.mContext = mContext;
+        RealmConfiguration config = new RealmConfiguration
+                .Builder(mContext)
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        realm = Realm.getInstance(config);
+        mPostureNoti = new PostureNotification(mContext);
     }
 
     /**
@@ -93,11 +103,7 @@ public class BluetoothHelper{
     public boolean writeToArduino(String msg) {
         msg += mStrDelimiter;  // 문자열 종료표시 (\n)
         try {
-            // getBytes() : String을 byte로 변환
-            // OutputStream.write : 데이터를 쓸때는 write(byte[]) 메소드를 사용함. byte[] 안에 있는 데이터를 한번에 기록해 준다.
-            //mOutputStream.write(msg.getBytes());
             mOutputStream.write(msg.getBytes());
-            mBluetoothAction.setFSRDataToUI(msg);
             return true;
         } catch (Exception e) {
             mBluetoothAction.connectionFail();
@@ -107,7 +113,7 @@ public class BluetoothHelper{
 
     public void onReadyToReceiveFSR() {
         if (writeToArduino(BluetoothConfig.REQUEST_FORCE_SENSOR_ON)) {
-            //realm = Realm.getInstance(mContext);
+
             beginListenForData();
         }
     }
@@ -145,8 +151,8 @@ public class BluetoothHelper{
                                     handler.post(new Runnable() {
                                         public void run() {
                                             Log.d("===FETCHED DATA===", data);
+                                            mPostureNoti.setPostureNotify(data);
                                             mBluetoothAction.setFSRDataToUI(data);
-                                            /*
                                             MyData mData = new MyData();
                                             mData.setName("posture");
                                             mData.setNow(new Date());
@@ -154,7 +160,7 @@ public class BluetoothHelper{
                                             realm.beginTransaction();
                                             realm.copyToRealm(mData);
                                             realm.commitTransaction();
-                                            realm.close();*/
+                                            //realm.close();
                                         }
                                     });
                                 } else {
@@ -170,15 +176,4 @@ public class BluetoothHelper{
         });
         mWorkerThread.start();
     }
-    public void test(){
-        Log.e("==TEST==","delivered BTHELPER");
-        MyData mData = new MyData();
-        mData.setName("posture");
-        mData.setNow(new Date());
-        realm.beginTransaction();
-        realm.copyToRealm(mData);
-        realm.commitTransaction();
-    }
-
-
 }

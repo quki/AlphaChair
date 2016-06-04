@@ -1,11 +1,10 @@
 package com.quki.alphachair.alphachairandroid.service;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -17,10 +16,10 @@ import com.quki.alphachair.alphachairandroid.R;
 /**
  * Created by quki on 2016-05-31.
  */
-public class MainService extends Service implements Runnable{
+public class MainService extends Service implements Runnable {
 
     private Handler mHandler;
-    private String postureMsg;
+    private final IBinder mBinder = new MyBinder();
 
     @Override
     public void onCreate() {
@@ -31,16 +30,14 @@ public class MainService extends Service implements Runnable{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        postureMsg = intent.getStringExtra("msg");
-        if(postureMsg!=null)
-        mHandler.postDelayed(this, 1);
+
         return START_STICKY;
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
     }
 
     @Override
@@ -52,8 +49,8 @@ public class MainService extends Service implements Runnable{
 
     @Override
     public void run() {
-        setPostureNotify(postureMsg);
     }
+
     protected void setServiceProgressNotify() {
         PendingIntent invokeActivity =
                 PendingIntent.getActivity(
@@ -69,25 +66,14 @@ public class MainService extends Service implements Runnable{
         Notification mNotification = mBuilder.build();
         mNotification.flags = Notification.FLAG_AUTO_CANCEL;
         mNotification.priority = Notification.PRIORITY_MAX;
-        startForeground(1,mNotification);
+        startForeground(1, mNotification);
     }
-    protected void setPostureNotify(String msg){
-        PendingIntent invokeActivity =
-                PendingIntent.getActivity(
-                        this
-                        , 0
-                        , new Intent(this, MainActivity.class)
-                        , PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("자세를 바르게 하세요!")
-                .setContentText(msg)
-                .setContentIntent(invokeActivity);
-        Notification mNotification = mBuilder.build();
-        mNotification.flags = Notification.FLAG_AUTO_CANCEL;
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on.
-        mNotificationManager.notify(2, mNotification);
+
+
+
+    public class MyBinder extends Binder {
+        public MainService getService() {
+            return MainService.this;
+        }
     }
 }

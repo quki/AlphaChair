@@ -97,11 +97,5 @@
         android:layout_below="@+id/plusTemp"
         android:layout_marginLeft="250dp"
         android:text="자세결과보기" />
-    <Button
-        android:id="@+id/alarm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/nextActivity"
-        android:layout_marginLeft="250dp"
-        android:text="알람테스트" />
+
 </RelativeLayout>
