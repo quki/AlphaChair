@@ -100,7 +100,7 @@ void readPressure(){
   Serial.println("3 : "+ String(backLeft));
 
   if(frontRight>2000){
-    BTSerial.println("right leg side");
+    BTSerial.println("fr");
   }
 }
 
