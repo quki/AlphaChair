@@ -99,9 +99,20 @@ void readPressure(){
   Serial.println("2 : "+ String(backRight));
   Serial.println("3 : "+ String(backLeft));
 
+  // send 'posture msg' to android
   if(frontRight>2000){
     BTSerial.println("fr");
   }
+  if(frontLeft>2000){
+    BTSerial.println("fl");
+  }
+  if(backRight>2000){
+    BTSerial.println("br");
+  }
+  if(backLeft>2000){
+    BTSerial.println("bl");
+  }
+  
 }
 
 void readTmp(){
