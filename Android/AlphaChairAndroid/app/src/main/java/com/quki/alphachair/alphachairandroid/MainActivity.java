@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 mTemperature += TEMPERATURE_OFFSET;
-                mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_ON+mTemperature);
+                mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_ON);
                 temperature.setText(String.valueOf(mTemperature));
             }
         });
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mTemperature -= TEMPERATURE_OFFSET;
                 if(mTemperature>0){
-                    mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_ON+mTemperature);
+                    mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_ON);
                 }else{
                     mTemperature = 0;
                     mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_OFF);

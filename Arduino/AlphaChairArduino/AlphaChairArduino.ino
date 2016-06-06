@@ -23,8 +23,6 @@ int PRESSURE_3 = A3;
 
 bool isTMPOn = false;
 
-int MAX_TMP;
-
 SoftwareSerial BTSerial(2, 3); // (RX, TX)
 
 void setup() {
@@ -51,11 +49,7 @@ void loop() {
     }
     response.concat(tempChar);
   }
-  if(response.length()>1){
-    String resInt = response.substring(1);
-    response = response.substring(0,1);
-    MAX_TMP = resInt.toInt();
-  }
+  
   if(response.equals(PPR_ON)){
     Serial.println(response);
     digitalWrite(INA,HIGH);
@@ -75,14 +69,12 @@ void loop() {
     isTMPOn = true;
   }else if(response.equals(TMP_OFF)){
     Serial.println(response);
-    MAX_TMP = 0;
     digitalWrite(MOSFET_C1,LOW);
     isTMPOn = false;
   }
-  
-  if(isTMPOn && MAX_TMP >0){
+
+  if(isTMPOn)
     readTmp();
-  }
   
   if(fsrThread.shouldRun())
     fsrThread.run();
@@ -112,11 +104,10 @@ void readPressure(){
   if(backLeft>2000){
     BTSerial.println("bl");
   }
-  
 }
 
 void readTmp(){
     digitalWrite(MOSFET_C1,HIGH);
-    Serial.println(String(MAX_TMP));  
+    Serial.println("temperature on"));  
 }
 
