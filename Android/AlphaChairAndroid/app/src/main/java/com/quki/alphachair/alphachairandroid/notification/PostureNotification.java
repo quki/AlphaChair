@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 
 import com.quki.alphachair.alphachairandroid.MainActivity;
@@ -16,9 +17,10 @@ import com.quki.alphachair.alphachairandroid.R;
 public class PostureNotification {
 
     private Context mContext;
-
+    private Vibrator mVibrator;
     public PostureNotification(Context mContext){
         this.mContext = mContext;
+        mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     public void setPostureNotify(String msgFromArduino) {
@@ -35,15 +37,17 @@ public class PostureNotification {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("자세를 바르게 하세요!")
                 .setContentText(msg)
+                .setAutoCancel(true)
                 .setContentIntent(invokeActivity);
         Notification mNotification = mBuilder.build();
-        mNotification.flags = Notification.FLAG_AUTO_CANCEL;
+        mNotification.flags = Notification.FLAG_NO_CLEAR;
         NotificationManager mNotificationManager =
                 (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(2, mNotification);
+        mVibrator.vibrate(1500);
     }
 
-    private String translateMsg(String msgFromArduino){
+    public String translateMsg(String msgFromArduino){
         StringBuffer msg = new StringBuffer();
 
         switch (msgFromArduino){

@@ -152,11 +152,11 @@ public class BluetoothHelper{
                                         public void run() {
                                             Log.d("===FETCHED DATA===", data);
                                             mPostureNoti.setPostureNotify(data);
-                                            mBluetoothAction.setFSRDataToUI(data);
+                                            mBluetoothAction.setFSRDataToUI(mPostureNoti.translateMsg(data));
                                             MyData mData = new MyData();
                                             mData.setName("posture");
                                             mData.setNow(new Date());
-                                            mData.setPosture(data);
+                                            mData.setPosture(mPostureNoti.translateMsg(data));
                                             realm.beginTransaction();
                                             realm.copyToRealm(mData);
                                             realm.commitTransaction();

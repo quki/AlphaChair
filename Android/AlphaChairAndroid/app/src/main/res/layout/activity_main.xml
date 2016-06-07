@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -32,40 +33,14 @@
         android:text="Off" />
 
     <TextView
-        android:id="@+id/sensorViewtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/offButton"
-        android:layout_marginTop="25dp"
-        android:text="압력센서"
-        android:textSize="20dp" />
-
-    <Button
-        android:id="@+id/receiveFSRButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/sensorView"
-        android:layout_below="@+id/offButton"
-        android:text="On" />
-
-    <TextView
-        android:id="@+id/sensorView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/offButton"
-        android:layout_marginLeft="170dp"
-        android:layout_marginTop="60dp"
-        android:text="0"
-        android:textSize="30dp" />
-
-    <TextView
         android:id="@+id/tempViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/receiveFSRButton"
+        android:layout_below="@id/onButton"
         android:layout_marginTop="60dp"
         android:text="온도"
         android:textSize="20dp" />
+
     <Button
         android:id="@+id/minusTemp"
         android:layout_width="wrap_content"
@@ -82,6 +57,7 @@
         android:layout_marginLeft="170dp"
         android:text="0"
         android:textSize="30dp" />
+
     <Button
         android:id="@+id/plusTemp"
         android:layout_width="wrap_content"
@@ -90,12 +66,31 @@
         android:layout_below="@+id/tempViewTitle"
         android:layout_marginLeft="250dp"
         android:text="+" />
-    <Button
-        android:id="@+id/nextActivity"
+
+
+    <TextView
+        android:id="@+id/sensorViewtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/plusTemp"
-        android:layout_marginLeft="250dp"
-        android:text="자세결과보기" />
+        android:layout_below="@id/plusTemp"
+        android:layout_marginTop="25dp"
+        android:text="압력센서"
+        android:textSize="20dp" />
 
+    <Button
+        android:id="@+id/receiveFSRButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sensorViewtitle"
+        android:text="On" />
+
+    <TextView
+        android:id="@+id/postureNoti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/receiveFSRButton"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="50dp"
+        android:textSize="20dp" />
 </RelativeLayout>

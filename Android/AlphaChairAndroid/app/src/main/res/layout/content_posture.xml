@@ -18,9 +18,19 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/postureDBTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:text="이병근 님의 자세정보" />
+
+        <TextView
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/postureDBTitle"
+            android:layout_marginTop="20dp"
             android:text="none" />
 
     </RelativeLayout>
