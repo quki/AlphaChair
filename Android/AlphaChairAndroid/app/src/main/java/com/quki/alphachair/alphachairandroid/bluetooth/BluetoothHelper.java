@@ -104,6 +104,7 @@ public class BluetoothHelper{
         msg += mStrDelimiter;  // 문자열 종료표시 (\n)
         try {
             mOutputStream.write(msg.getBytes());
+            Log.i("==WRITE_SUCCESS==",msg);
             return true;
         } catch (Exception e) {
             mBluetoothAction.connectionFail();
@@ -146,17 +147,16 @@ public class BluetoothHelper{
                                 if (b == delimiter) {
                                     byte[] encodedBytes = new byte[readBufferPosition];
                                     System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
-                                    final String data = new String(encodedBytes, "US-ASCII");
+                                    final String data = new String(encodedBytes,"UTF-8");
                                     readBufferPosition = 0;
                                     handler.post(new Runnable() {
                                         public void run() {
-                                            Log.d("===FETCHED DATA===", data);
                                             mPostureNoti.setPostureNotify(data);
-                                            mBluetoothAction.setFSRDataToUI(mPostureNoti.translateMsg(data));
+                                            mBluetoothAction.setFSRDataToUI(data);
                                             MyData mData = new MyData();
                                             mData.setName("posture");
                                             mData.setNow(new Date());
-                                            mData.setPosture(mPostureNoti.translateMsg(data));
+                                            mData.setPosture(data);
                                             realm.beginTransaction();
                                             realm.copyToRealm(mData);
                                             realm.commitTransaction();

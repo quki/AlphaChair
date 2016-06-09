@@ -124,7 +124,7 @@ void sendPostureMsg(int frontRight,int frontLeft, int backRight, int backLeft){
 
     if(frontRight>=10 || frontLeft>=10 || backRight>=10 || backLeft>=10){
       // 왼쪽으로 기울임 : 0
-    if(frontRight<100 && backRight<100){
+    if(frontRight<300 && backRight<300){
         count_0++;
         if(count_0 >= 5){
           BTSerial.println("몸을 왼쪽으로 기울이지 마세요!");
@@ -132,7 +132,7 @@ void sendPostureMsg(int frontRight,int frontLeft, int backRight, int backLeft){
         }
         
       // 다리꼬기 : 오른쪽 다리 올리기 : 1  
-      }else if(frontRight <100){
+      }else if(frontRight <300){
         count_1++;
         if(count_1 >= 5){
           BTSerial.println("오른쪽 다리를 꼬지마세요!");
@@ -144,7 +144,7 @@ void sendPostureMsg(int frontRight,int frontLeft, int backRight, int backLeft){
       }
 
     // 오른쪽으로 기울임 : 2
-    if(frontLeft<100 && backLeft<100){
+    if(frontLeft<300 && backLeft<300){
         count_2++;
         if(count_2 >= 5){
           BTSerial.println("몸을 오른쪽으로 기울이지 마세요!");
@@ -152,7 +152,7 @@ void sendPostureMsg(int frontRight,int frontLeft, int backRight, int backLeft){
         }
         
       // 다리꼬기 : 왼쪽 다리 올리기 : 3  
-      }else if(frontLeft <100){
+      }else if(frontLeft <300){
         count_3++;
         if(count_3 >= 5){
           BTSerial.println("왼쪽다리를 꼬지마세요!");
@@ -164,7 +164,7 @@ void sendPostureMsg(int frontRight,int frontLeft, int backRight, int backLeft){
       }
       
     // 발끝 들기 : 4
-    if(frontRight<100  && frontLeft<100){
+    if(frontRight<300  && frontLeft<300){
         count_4++;
         if(count_4 >= 5){
           BTSerial.println("발끝을 들지 마세요!");
@@ -175,7 +175,7 @@ void sendPostureMsg(int frontRight,int frontLeft, int backRight, int backLeft){
     }
 
     // 엎드리기 && 눕기 : 5
-    if(backRight<100  && backLeft<100){
+    if(backRight<300  && backLeft<300){
         count_5++;
         if(count_5 >= 5){
           BTSerial.println("엎드리기거나 눕지 마세요!");

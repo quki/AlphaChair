@@ -18,14 +18,13 @@ public class PostureNotification {
 
     private Context mContext;
     private Vibrator mVibrator;
+
     public PostureNotification(Context mContext){
         this.mContext = mContext;
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     public void setPostureNotify(String msgFromArduino) {
-
-        String  msg  = translateMsg(msgFromArduino);
 
         PendingIntent invokeActivity =
                 PendingIntent.getActivity(
@@ -34,43 +33,16 @@ public class PostureNotification {
                         , new Intent(mContext, MainActivity.class)
                         , PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_main)
                 .setContentTitle("자세를 바르게 하세요!")
-                .setContentText(msg)
+                .setContentText(msgFromArduino)
                 .setAutoCancel(true)
                 .setContentIntent(invokeActivity);
         Notification mNotification = mBuilder.build();
-        mNotification.flags = Notification.FLAG_NO_CLEAR;
+        //mNotification.flags = Notification.FLAG_NO_CLEAR;
         NotificationManager mNotificationManager =
                 (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(2, mNotification);
         mVibrator.vibrate(1500);
-    }
-
-    public String translateMsg(String msgFromArduino){
-        StringBuffer msg = new StringBuffer();
-
-        switch (msgFromArduino){
-            case "fr" : {
-                msg.append("앞쪽의 오른쪽다리");
-                break;
-            }
-            case "fl" : {
-                msg.append("앞쪽의 왼쪽다리");
-                break;
-            }
-            case "br" : {
-                msg.append("엉덩이의 오른쪽");
-                break;
-            }
-            case "bl" : {
-                msg.append("엉덩이의 왼쪽");
-                break;
-            }
-        }
-
-        msg.append("\n바르게하세요");
-
-        return msg.toString();
     }
 }

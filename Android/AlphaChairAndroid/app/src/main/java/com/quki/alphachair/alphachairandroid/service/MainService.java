@@ -59,7 +59,7 @@ public class MainService extends Service implements Runnable {
                         , new Intent(this, MainActivity.class)
                         , PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_main)
                 .setContentTitle("Alpha Chair")
                 .setContentText("자세 측정 중...")
                 .setContentIntent(invokeActivity);
