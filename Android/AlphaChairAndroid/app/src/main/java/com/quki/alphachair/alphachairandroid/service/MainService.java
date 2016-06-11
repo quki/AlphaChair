@@ -61,7 +61,7 @@ public class MainService extends Service implements Runnable {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_main)
                 .setContentTitle("Alpha Chair")
-                .setContentText("자세 측정 중...")
+                .setContentText("Service Foreground")
                 .setContentIntent(invokeActivity);
         Notification mNotification = mBuilder.build();
         mNotification.flags = Notification.FLAG_AUTO_CANCEL;

@@ -1,10 +1,5 @@
 #include <SoftwareSerial.h>
 #include <Thread.h>
-#include <QueueList.h>
-
-QueueList <int> q;
-int sum ;
-int firstVal;
 
 #define PPR_ON "a"
 #define PPR_OFF "b"

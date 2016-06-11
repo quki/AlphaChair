@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -26,14 +25,14 @@ public class MainActivity extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_ENABLE_BT = 1001;
-    private Button onButton,offButton,receiveFSRButton;
-    private TextView temperature,postureNoti;
-    private ImageView plusTemp,minusTemp;
-    private Switch propellerSwitch,fsrSwitch;
+    private TextView temperature, postureNoti;
+    private ImageView plusTemp, minusTemp;
+    private Switch propellerSwitch, fsrSwitch;
     private View parentLayout;
     private BluetoothHelper mBluetoothHelper;
     private static int TEMPERATURE_OFFSET = 10;
     private int mTemperature = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
         plusTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mTemperature <= 50){
+                if (mTemperature <= 50) {
                     mTemperature += TEMPERATURE_OFFSET;
-                }else{
+                } else {
                     Snackbar.make(parentLayout, "온도가 너무 높습니다.", Snackbar.LENGTH_SHORT)
                             .setAction("Action", null).show();
                     plusTemp.setEnabled(false);
@@ -63,14 +62,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        minusTemp.setOnClickListener(new View.OnClickListener(){
+        minusTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 plusTemp.setEnabled(true);
                 mTemperature -= TEMPERATURE_OFFSET;
-                if(mTemperature>0){
+                if (mTemperature > 0) {
                     mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_ON);
-                }else{
+                } else {
                     mTemperature = 0;
                     mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_TEMPERATURE_OFF);
                 }
@@ -78,25 +77,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        propellerSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener(){
+        propellerSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_PROPELLER_ON);
-                }else{
+                } else {
                     mBluetoothHelper.writeToArduino(BluetoothConfig.REQUEST_PROPELLER_OFF);
                 }
             }
         });
-        fsrSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener(){
+        fsrSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     Snackbar.make(parentLayout, "자세를 측정합니다. 정자세를 유지해주세요...", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     postureNoti.setText("자세 측정 중...");
                     mBluetoothHelper.onReadyToReceiveFSR();
-                }else{
+                } else {
                     mBluetoothHelper.offFSR();
                     postureNoti.setText("");
                 }
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initBluetooth() {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mBluetoothHelper = new BluetoothHelper(mBluetoothAdapter,getBluetoothAction(),getApplicationContext());
+        mBluetoothHelper = new BluetoothHelper(mBluetoothAdapter, getBluetoothAction(), getApplicationContext());
         if (mBluetoothAdapter != null) {
             if (!mBluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -124,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private BluetoothAction getBluetoothAction(){
+    private BluetoothAction getBluetoothAction() {
         return new BluetoothAction() {
             @Override
             public void connectionSuccess() {
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void connectionFail() {
-                Toast.makeText(getApplicationContext(),"연결 실패",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "연결 실패", Toast.LENGTH_SHORT).show();
                 propellerSwitch.setChecked(false);
                 fsrSwitch.setChecked(false);
                 postureNoti.setText("");
@@ -172,16 +171,17 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void startService(){
+    private void startService() {
         Intent intentService = new Intent(this, MainService.class);
         startService(intentService);
     }
 
 
-    private void stopService(){
+    private void stopService() {
         Intent intentService = new Intent(this, MainService.class);
         stopService(intentService);
     }
+
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -191,11 +191,11 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        // XML로 옵션메뉴 추가 하기
-       getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.myPostureData:
-                Intent nextIntent = new Intent(MainActivity.this,PostureActivity.class);
+                Intent nextIntent = new Intent(MainActivity.this, PostureActivity.class);
                 startActivity(nextIntent);
                 break;
 

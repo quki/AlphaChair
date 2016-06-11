@@ -69,7 +69,7 @@ public class BluetoothHelper{
     }
 
     /**
-     * Connect Arduino (HC-06 already found) and make socket and stream(I/O)
+     * Connect with Arduino (HC-06 already found) and make socket and stream(I/O)
      *
      * @param mArduino
      */
@@ -89,6 +89,9 @@ public class BluetoothHelper{
         }
     }
 
+    /**
+     * Disconect white Arduino
+     */
     public void disconnectWithArduino() {
         if (mSocket != null) {
             try {
@@ -100,6 +103,11 @@ public class BluetoothHelper{
         }
     }
 
+    /**
+     * Android -> Arduino
+     * @param msg
+     * @return
+     */
     public boolean writeToArduino(String msg) {
         msg += mStrDelimiter;  // 문자열 종료표시 (\n)
         try {
@@ -112,6 +120,9 @@ public class BluetoothHelper{
         }
     }
 
+    /**
+     * On ready to receiving data
+     */
     public void onReadyToReceiveFSR() {
         if (writeToArduino(BluetoothConfig.REQUEST_FORCE_SENSOR_ON)) {
 
@@ -119,6 +130,9 @@ public class BluetoothHelper{
         }
     }
 
+    /**
+     * Stop receiving from Arduino
+     */
     public void offFSR() {
         if (writeToArduino(BluetoothConfig.REQUEST_FORCE_SENSOR_OFF)) {
             mWorkerThread.interrupt();
@@ -127,6 +141,9 @@ public class BluetoothHelper{
         }
     }
 
+    /**
+     * Arduino -> Android
+     */
     public void beginListenForData() {
         final Handler handler = new Handler(); //Inform to the Main Thread
         final byte delimiter = 10; //This is the ASCII code for a newline character
@@ -160,7 +177,6 @@ public class BluetoothHelper{
                                             realm.beginTransaction();
                                             realm.copyToRealm(mData);
                                             realm.commitTransaction();
-                                            //realm.close();
                                         }
                                     });
                                 } else {

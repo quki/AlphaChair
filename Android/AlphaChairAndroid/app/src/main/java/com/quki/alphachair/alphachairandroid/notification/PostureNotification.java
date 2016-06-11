@@ -24,6 +24,10 @@ public class PostureNotification {
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
+    /**
+     * Create Notification and notify
+     * @param msgFromArduino
+     */
     public void setPostureNotify(String msgFromArduino) {
 
         PendingIntent invokeActivity =
